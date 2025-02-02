@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Stereo Calculator - Calculate stereobase and depth budget">
+  <meta name="keywords" content="stereobase, 3d, stereoscopy">
+  <meta name="author" content="@foxihd on github">
+  <title>Binocularity.org - Free Stereo Camera Calculator</title>
+  <script src="stereocalc.js"></script>
+  <style>
+    @font-face{font-family:'Inter';font-style:normal;font-weight:400;font-display:swap;src:local('Inter'), url("https://raw.githubusercontent.com/rsms/inter/master/docs/font-files/Inter-Regular.woff2") format('woff2')}
+    @font-face{font-family:'Inter';font-style:normal;font-weight:700;font-display:swap;src:local('Inter Bold'), url("https://raw.githubusercontent.com/rsms/inter/master/docs/font-files/Inter-Bold.woff2") format('woff2')}
+    :root{--indent:2rem;--bg:#f9f9fb;--fg:#111}
+    body{max-width:1024px;margin:0 auto;background:var(--bg);font-family:Inter, sans-serif}
+    header{padding:1rem;line-height:1.3;font-size:0.9em}
+    header p{max-width:480px}
+    main{margin:0 auto;line-height:2.4}
+    form{column-width:480px}
+    fieldset{border:none;break-inside:avoid;break-before:always}
+    fieldset > fieldset{margin-left:var(--indent)}
+    legend{border-bottom:1pt solid var(--fg);display:block;font-weight:700;width:100%}
+    fieldset > div{display:flex;align-items:center;margin-left:var(--indent);margin-bottom:1rem;flex-direction:row}
+    label{margin-right:auto;font-size:0.9em}
+    input,output{width:4rem}
+    input{border:none;text-align:right;background:none}
+    .info{display:grid;grid-template-columns:repeat(2, 1fr);gap:1em}
+    .info label{display:block;font-weight:700;font-size:0.7em}
+    .has-desc::after{display:block;line-height:1;opacity:0.6;content:attr(aria-description);font-size:0.8em}
+    .has-input{border-bottom:2pt dotted var(--fg)}
+    .has-unit::after{width:1.5rem;font-family:monospace}
+    .has-unit.si-unit-mm::after{content:'mm'}
+    .has-unit.px::after{content:'px'}
+    .has-unit.deg::after{content:'°'}
+    footer{background:#000;color:#fff;padding:1rem;border-radius:2ex;margin:1rem 1rem 3rem}
+    footer p{margin:0;font-size:0.9em;line-height:1.4}
+    #cc-by{float:right}
+    #calculated-stereo-camera-inter-axial{display:flex;padding:1rem}
+    #stereobase{flex-direction:column;padding:1rem;line-height:1.3;margin:auto}
+    #stereobase label{margin:auto;text-transform:uppercase;font-weight:700;letter-spacing:0.1ex}
+    #stereobase span{font-size:3rem}
+    .reset-button{border:none;padding:1ex 1rem;background:var(--fg);color:var(--bg);text-transform:uppercase;letter-spacing:0.1ex;font-size:0.6em}
+    @media screen and (max-width: 480px){:root{--indent:0}#calculated-stereo-camera-inter-axial{flex-direction:column}.reset-button{margin-bottom:1rem;position:fixed;bottom:0}}
+    @media (prefers-color-scheme: dark){:root{--bg:#111;--fg:#f9f9fb}}
+    @media (prefers-color-scheme: light){:root{--fg:#111;--bg:#f9f9fb}}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Binocularity.org - Free Stereo Camera Calculator</h1>
+    <p> This is a recreated stereobase calculator originally developed by Dr. Nick Holliman for binocularity.org.
+      The original website is no longer active and can only be accessed through <a href="https://web.archive.org/web/20091103053637/http://www.binocularity.org/page19.php" title="binocularity.org on archive.org">archive.org</a>.
+      This calculator is widely regarded as one of the most effective tools for stereobase calculations.
+    </p>
+    <p> I was fortunate to recover this calculator from an archived backup, as the original file is now very difficult to find online.
+      The original source is available at <a href="https://github.com/foxihd/stereocalc">https://github.com/foxihd/stereocalc</a>.
+    </p>
+  </header>
+  <main>
+    <fieldset id="calculated-stereo-camera-inter-axial">
+      <legend>Calculated Stereo Camera Inter-Axial</legend>
+      <div id="stereobase">
+        <label for="cameraSeparation">Camera Separation:</label>
+        <span class="has-unit si-unit-mm">
+          <output id="cameraSeparation" name="cameraSeparation"></output>
+        </span>
+        <button type="button" class="reset-button" onclick="resetCalculator()" title="Reset Calculator">Reset Calculator</button>
+      </div>
+      <div class="info">
+        <div>
+          <label for="croppingPercentage">Cropping Percentage:</label>
+          <span class="has-unit"><output id="croppingPercentage" name="croppingPercentage"></output></span>
+        </div>  
+        <div>
+          <label for="croppingPixels">Cropping Pixels:</label>
+          <span class="has-unit px">
+            <output id="croppingPixels" name="croppingPixels"></output>
+          </span>
+        </div>
+        <div>
+          <label for="croppingTo">Cropping To:</label>
+          <span class="has-unit px">
+            <output id="croppingTo" name="croppingTo"></output>
+          </span>
+        </div>
+        <div>
+          <label for="depthAspectRatio">Depth Aspect Ratio:</label>
+          <output id="depthAspectRatio" name="depthAspectRatio"></output>
+        </div>
+      </div>
+    </fieldset>
+    <form>
+      <fieldset id="display-viewer-space">
+        <legend>Display/Viewer Space</legend>
+        <fieldset>
+          <legend>Define the 3D Display</legend>
+          <div>
+            <label class="has-desc" for="viewingDistance" aria-description="Display depth from the viewer">Viewing Distance:</label>
+            <span class="has-input has-unit si-unit-mm">
+              <input type="number" id="viewingDistance"name="viewingDistance" min="0" value="700" oninput="calculate()">
+            </span>
+          </div>
+          <div>
+            <label class="has-desc" for="nearDepthBudget" aria-description="Depth budget in-front of screen">Near Depth Budget:</label>
+            <span class="has-input has-unit si-unit-mm">
+              <input type="number" id="nearDepthBudget" name="nearDepthBudget" min="0" value="68" oninput="calculate()">
+            </span>
+          </div>
+          <div>
+            <label class="has-desc" for="farDepthBudget" aria-description="Depth budget behind screen">Far Depth Budget:</label>
+            <span class="has-input has-unit si-unit-mm">
+              <input type="number" id="farDepthBudget" name="farDepthBudget" min="0" value="68" oninput="calculate()">
+            </span>
+          </div>
+          <div>
+            <label for="screenWidth">Screen Width:</label>
+            <span class="has-input has-unit si-unit-mm">
+              <input type="number" id="screenWidth" name="screenWidth" min="0" value="340" oninput="calculate()">
+            </span>
+          </div>
+          <div>
+            <label for="screenWidthResolution">Screen Width Resolution:</label>
+            <span class="has-input has-unit px">
+              <input type="number" id="screenWidthResolution" name="screenWidthResolution" min="0" value="2048" oninput="calculate()">
+            </span>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Define the Viewer</legend>
+          <div>
+            <label for="eyeSeparation" aria-description="An average value, or measured">Eye Separation:</label>
+            <span class="has-input has-unit si-unit-mm">
+              <input type="number" id="eyeSeparation" name="eyeSeparation" min="51" max="77" value="65" oninput="calculate()">
+            </span>
+          </div>
+          <div class="info">
+            <div>
+              <label for="nearDisparity">Near Disparity:</label>
+              <span class="has-unit si-unit-mm">
+                <output id="nearDisparity" name="nearDisparity"></output>
+              </span>
+            </div>  
+            <div>
+              <label for="farDisparity">Far Disparity:</label>
+              <span class="has-unit si-unit-mm">
+                <output id="farDisparity" name="farDisparity"></output>
+              </span>
+            </div>
+            <div>
+              <label for="disparityRatio">Disparity Ratio:</label>
+              <span><output id="disparityRatio" name="disparityRatio"></output></span>
+            </div>
+          </div>
+        </fieldset>
+      </fieldset>
+      <fieldset id="scene-camera-space">
+        <legend>Scene/Camera Space</legend>
+        <fieldset>
+          <legend>Define the Scene to be Photographed</legend>
+          <div>
+            <label for="nearestObject">Nearest Object:</label>
+            <span class="has-input has-unit si-unit-mm">
+              <input type="number" id="nearestObject" name="nearestObject" value="2000" oninput="calculate()">
+            </span>
+          </div>
+          <div>
+            <label for="furthestObject">Furthest Object:</label>
+            <span class="has-input has-unit si-unit-mm">
+              <input type="number" id="furthestObject" name="furthestObject" value="2400" oninput="calculate()">
+            </span>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Define the Centre Camera Setup</legend>
+          <div>
+            <label for="focalLength">Focal Length:</label>
+            <span class="has-input has-unit si-unit-mm">
+              <input type="number" id="focalLength" name="focalLength" min="0" value="80" oninput="calculate()">
+            </span>
+          </div>
+          <div>
+            <label for="sensorWidth">Sensor Width:</label>
+            <span class="has-input has-unit si-unit-mm">
+              <input type="number" id="sensorWidth" name="sensorWidth" min="0" value="36" oninput="calculate()">
+            </span>
+          </div>
+          <div class="info">
+            <div>
+              <label for="TAN">TAN (Half Field of View):</label>
+              <span><output id="TAN" name="TAN"></output></span>
+            </div>
+            <div>
+              <label for="fieldOfView">Field of View:</label>
+              <span class="has-unit deg">
+                <output id="fieldOfView" name="fieldOfView"></output>
+              </span>
+            </div>
+            <div>
+              <label for="virtualScreenDistanceInScene">Virtual Screen Distance:</label>
+              <span class="has-unit si-unit-mm">
+                <output id="virtualScreenDistanceInScene" name="virtualScreenDistanceInScene"></output>
+              </span>
+            </div>
+            <div>
+              <label for="virtualScreenWidth">Virtual Screen Width:</label>
+              <span class="has-unit si-unit-mm">
+                <output id="virtualScreenWidth" name="virtualScreenWidth"></output>
+              </span>
+            </div>
+          </div>
+        </fieldset>
+      </fieldset>
+    </form>
+  </main>
+  <footer>
+    <a id="cc-by" href="https://creativecommons.org/licenses/by/2.0/uk/" title="Creative Commons Attribution 2.0 UK: England & Wales License">
+      <img src="http://i.creativecommons.org/l/by/2.0/uk/88x31.png" alt="Creative Commons Attribution 2.0 UK: England & Wales License">
+    </a>
+    <p>Stereo Calculator By Dr Nick Holliman is licensed under a Creative Commons Attribution 2.0 UK: England & Wales License.
+    <br>Based on a work at <a href="https://web.archive.org/web/20091103053637/http://www.binocularity.org/page19.php" title="binocularity.org on archive.org">http://www.binocularity.org.</a>
+  </footer>
+  <script>
+    calculate(); // Initial calculation
+  </script>
+</body>
+</html>
