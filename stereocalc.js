@@ -60,3 +60,18 @@ const getA = (Zc, theta, dN, Nc, W) => (2 * Zc * theta * dN * Nc) / (W * (Zc - N
 const getCrop = (A, Wc) => A / (Wc + A);
 const getCpix = (Crop, X) => Crop * X;
 const getCout = (Cpix, X) => X - Cpix;
+
+// Reset input fields
+function resetCalculator() {
+    getElement('viewingDistance').value = '700';
+    getElement('nearDepthBudget').value = '68';
+    getElement('farDepthBudget').value = '68';
+    getElement('screenWidth').value = '340';
+    getElement('screenWidthResolution').value = '1500'
+    getElement('eyeSeparation').value = '65';
+    getElement('nearestObject').value = '2000';
+    getElement('furthestObject').value = '2400';
+    getElement('focalLength').value = '80';
+    getElement('sensorWidth').value = '36';
+    calculate();
+}
