@@ -21,10 +21,10 @@
     fieldset > fieldset{margin-left:var(--indent)}
     legend{border-bottom:1pt solid var(--fg);display:block;font-weight:700;width:100%}
     fieldset > div{display:flex;align-items:center;margin-left:var(--indent);margin-bottom:1rem;flex-direction:row}
-    label{margin-right:auto;font-size:0.9em}
+    label{flex:1;font-size:0.9em}
     input,output{width:4rem}
     input{border:none;text-align:right;background:none;color:var(--fg)!important;}
-    .info{display:grid;grid-template-columns:repeat(2, 1fr);gap:1em}
+    .info{display:grid;grid-template-columns:repeat(2, 1fr);gap:1em;align-items:baseline}
     .info label{display:block;font-weight:700;font-size:0.7em}
     .has-desc::after{display:block;line-height:1;opacity:0.6;content:attr(aria-description);font-size:0.8em}
     .has-input{border-bottom:2pt dotted var(--fg)}
