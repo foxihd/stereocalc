@@ -6,7 +6,13 @@
   <meta name="description" content="Stereo Calculator - Calculate stereobase and depth budget">
   <meta name="keywords" content="stereobase, 3d, stereoscopy">
   <meta name="author" content="@foxihd on github">
-  <title>Binocularity.org - Free Stereo Camera Calculator</title>
+  <title>Stereo Camera Calculator by Binocularity.org</title>
+  <link rel="manifest" href="/site.webmanifest" />
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("service-worker.js");
+    }
+  </script>
   <script>
     const getElement = id => document.getElementById(id);
     function calculate() {
