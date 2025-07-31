@@ -98,10 +98,8 @@
     }
   </script>
   <style>
-    @font-face{font-family:'Inter';font-style:normal;font-weight:400;font-display:swap;src:local('Inter'), url("https://raw.githubusercontent.com/rsms/inter/master/docs/font-files/Inter-Regular.woff2") format('woff2')}
-    @font-face{font-family:'Inter';font-style:normal;font-weight:700;font-display:swap;src:local('Inter Bold'), url("https://raw.githubusercontent.com/rsms/inter/master/docs/font-files/Inter-Bold.woff2") format('woff2')}
     :root{--indent:2rem;--bg:#f9f9fb;--fg:#111}
-    body{max-width:1024px;margin:0 auto;background:var(--bg);color:var(--fg);font-family:Inter, sans-serif}
+    body{max-width:1024px;margin:0 auto;background:var(--bg);color:var(--fg);font-family:sans-serif}
     header{padding:1rem;line-height:1.3;font-size:0.9em}
     header p{max-width:480px}
     main{margin:0 auto;line-height:2.4}
@@ -121,8 +119,8 @@
     .has-unit.si-unit-mm::after{content:'mm'}
     .has-unit.px::after{content:'px'}
     .has-unit.deg::after{content:'°'}
-    footer{background:#000;color:#fff;padding:1rem;border-radius:1ex;margin:1rem 1rem 3rem}
-    footer p{margin:0;font-size:0.9em;line-height:1.4}
+    footer{background:#000;padding:1rem;border-radius:1ex;margin:1rem 1rem 3rem}
+    footer p, footer a{margin:0;color:#fff;font-size:0.9em;line-height:1.4}
     #cc-by{float:right}
     #calculated-stereo-camera-inter-axial{display:flex;padding:1rem}
     #stereobase{flex-direction:column;padding:1rem;line-height:1.3;margin:auto}
@@ -302,7 +300,7 @@
   </main>
   <footer>
     <a id="cc-by" href="https://creativecommons.org/licenses/by/2.0/uk/" title="Creative Commons Attribution 2.0 UK: England & Wales License">
-      <img src="https://i.creativecommons.org/l/by/2.0/uk/88x31.png" alt="Creative Commons Attribution 2.0 UK: England & Wales License">
+      <img src="https://i.creativecommons.org/l/by/2.0/uk/88x31.png" width="88px" height="31px" alt="Creative Commons Attribution 2.0 UK: England & Wales License">
     </a>
     <p>Stereo Calculator By Prof. Nick Holliman is licensed under a Creative Commons Attribution 2.0 UK: England & Wales License.
     <br>Based on a work at <a href="https://web.archive.org/web/20091103053637/http://www.binocularity.org/page19.php" title="binocularity.org on archive.org">https://www.binocularity.org.</a>
